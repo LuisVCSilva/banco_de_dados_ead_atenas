@@ -1,3 +1,9 @@
+##Notas de aula BD ADS UniAtenas -- Codigo do Pedro @PedroNHD
+
+#Código do Pedro que cria 1 ou mais funcionários que estejam em todos os projetos
+
+# query sendo testada: SELECT E.NSS,E.Pnome FROM Empregado E WHERE NOT EXISTS (SELECT P.PNumero FROM Projeto P  WHERE NOT EXISTS (SELECT 1 FROM Trabalha_em T WHERE T.NSSE=E.NSS AND T.PNO=P.PNumero));
+
 import random
 import string
 from datetime import date, timedelta
@@ -20,7 +26,7 @@ cursor = conn.cursor()
 # ==============================
 
 def nome_aleatorio(tam=8):
-    return random.choice(["Maria","Joao","Pedro","Joaquim","Joselia","Luis"]) + " " + random.choice(["Silva","Fernandes","Costa"])#''.join(random.choices(string.ascii_letters, k=tam))
+    return ''.join(random.choices(string.ascii_letters, k=tam))
 
 def data_aleatoria(inicio_ano=1990, fim_ano=2024):
     start = date(inicio_ano, 1, 1)
@@ -32,9 +38,13 @@ def data_aleatoria(inicio_ano=1990, fim_ano=2024):
 # PARÂMETROS
 # ==============================
 
-NUM_DEPARTAMENTOS = 5
-NUM_EMPREGADOS = 30
-NUM_PROJETOS = 10
+try:
+    NUM_DEPARTAMENTOS = int(input("Quantidade de Departamentos: "))
+    NUM_EMPREGADOS = int(input("Quantidade de Empregados: "))
+    NUM_PROJETOS = int(input("Quantidade de Projetos: "))
+except ValueError:
+    print("Erro: Por favor, insira apenas números inteiros.")
+    exit()
 
 # ==============================
 # GERAR EMPREGADOS
@@ -67,7 +77,7 @@ for nss in empregados:
         UPDATE Empregado
         SET NSSSUPER = %s
         WHERE NSS = %s
-    """, (1, nss))
+    """, (supervisor, nss))
 
 conn.commit()
 
@@ -130,8 +140,8 @@ conn.commit()
 # ==============================
 
 for nss in empregados:
-    projetos = random.sample(range(1, NUM_PROJETOS + 1),
-                             random.randint(1, 3))
+    projetos = random.sample(range(1, NUM_PROJETOS + 1), random.randint(1, NUM_PROJETOS))
+    
     for p in projetos:
         cursor.execute("""
             INSERT INTO Trabalha_em (NSSE, PNO, Horas)
@@ -148,4 +158,3 @@ cursor.close()
 conn.close()
 
 print("Banco populado com sucesso!")
-
