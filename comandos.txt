@@ -1,0 +1,166 @@
+mysql -u root -p company
+#senha: root
+
+# =========================
+# ACESSO
+# =========================
+mysql -u root -p
+# senha: root
+
+# sair
+exit
+# ou
+\q
+
+# limpar tela
+\! clear
+
+# cancelar comando travado
+Ctrl + C
+
+# =========================
+# BANCO DE DADOS
+# =========================
+SHOW DATABASES;
+
+CREATE DATABASE company;
+
+USE company;
+
+DROP DATABASE company;
+
+# =========================
+# TABELAS
+# =========================
+SHOW TABLES;
+
+DESCRIBE Empregado;
+# ou
+DESC Empregado;
+
+# =========================
+# CRIAR TABELA (EXEMPLO)
+# =========================
+CREATE TABLE teste (
+ id INT PRIMARY KEY,
+ nome VARCHAR(50),
+ valor DECIMAL(10,2)
+);
+
+# =========================
+# INSERIR DADOS
+# =========================
+INSERT INTO teste VALUES (1, 'Ana', 1000.50);
+
+# boa prática
+INSERT INTO teste (id, nome, valor)
+VALUES (2, 'Carlos', 2000.75);
+
+# =========================
+# CONSULTAS
+# =========================
+SELECT * FROM teste;
+
+SELECT nome FROM teste;
+
+SELECT * FROM teste WHERE valor > 1500;
+
+SELECT * FROM teste ORDER BY valor DESC;
+
+# =========================
+# UPDATE
+# =========================
+UPDATE teste
+SET valor = 3000
+WHERE id = 1;
+
+# =========================
+# DELETE
+# =========================
+DELETE FROM teste WHERE id = 2;
+
+# apagar tudo (cuidado)
+DELETE FROM teste;
+
+# =========================
+# FOREIGN KEY (DEMO)
+# =========================
+CREATE TABLE depto (
+ id INT PRIMARY KEY,
+ nome VARCHAR(50)
+);
+
+CREATE TABLE emp (
+ id INT PRIMARY KEY,
+ nome VARCHAR(50),
+ depto_id INT
+);
+
+# adicionar FK
+ALTER TABLE emp
+ADD CONSTRAINT fk_emp_depto
+FOREIGN KEY (depto_id)
+REFERENCES depto(id);
+
+# erro esperado
+INSERT INTO emp VALUES (1, 'Erro', 999);
+
+# correto
+INSERT INTO depto VALUES (1, 'TI');
+INSERT INTO emp VALUES (1, 'Ana', 1);
+
+# =========================
+# CASCADE
+# =========================
+ALTER TABLE emp DROP FOREIGN KEY fk_emp_depto;
+
+ALTER TABLE emp
+ADD CONSTRAINT fk_emp_depto
+FOREIGN KEY (depto_id)
+REFERENCES depto(id)
+ON DELETE CASCADE;
+
+# teste
+DELETE FROM depto WHERE id = 1;
+
+# =========================
+# MONEY (DECIMAL)
+# =========================
+CREATE TABLE pagamento (
+ id INT PRIMARY KEY,
+ descricao VARCHAR(50),
+ valor DECIMAL(10,2)
+);
+
+INSERT INTO pagamento VALUES (1, 'Salario', 2500.50);
+
+# erro float
+SELECT 0.1 + 0.2;
+
+# =========================
+# TRANSAÇÕES
+# =========================
+START TRANSACTION;
+
+UPDATE pagamento SET valor = valor - 100 WHERE id = 1;
+
+ROLLBACK;
+
+COMMIT;
+
+# =========================
+# JOIN
+# =========================
+SELECT e.nome, d.nome
+FROM emp e
+JOIN depto d ON e.depto_id = d.id;
+
+# =========================
+# DEBUG / AJUDA
+# =========================
+SHOW CREATE TABLE emp;
+
+SELECT DATABASE();
+
+# ver índices
+SHOW INDEX FROM emp;
