@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Filmes App</title>
+</head>
+<body>
+
+<h1>Cadastro de Filmes</h1>
+
+<form method="POST">
+    <input name="filme" placeholder="Nome do filme" required>
+
+    <label>Opinião:</label>
+    <input type="radio" name="opiniao" value="Ruim"> Ruim
+    <input type="radio" name="opiniao" value="Médio"> Médio
+    <input type="radio" name="opiniao" value="Bom"> Bom
+    <input type="radio" name="opiniao" value="Excelente"> Excelente
+
+    <button type="submit">Salvar</button>
+</form>
+
+<hr>
+
+{% for filme in filmes %}
+    <div>
+        <h3>{{ filme.filme }}</h3>
+        <p>{{ filme.opiniao }}</p>
+
+        <form method="POST" action="/deletar/{{ filme['_id'] }}/">
+            <button type="submit">Deletar</button>
+        </form>
+    </div>
+{% endfor %}
+
+</body>
+</html>
