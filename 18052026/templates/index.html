@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>Filmes NoSQL App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Lista de Filmes</h1>
+
+    <form method="POST">
+        <input name="filme" placeholder="Nome do filme" required>
+        <input name="opiniao" placeholder="Opinião" required>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <hr>
+
+    <ul>
+        {% for f in filmes %}
+        <li>
+            <b>{{ f["filme"] }}</b> - {{ f["opiniao"] }}
+
+            <form action="/deletar/{{ f['_id'] }}/" method="POST" style="display:inline;">
+                <button>deletar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
