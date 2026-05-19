@@ -1,0 +1,13 @@
+{
+  "nome": "Carlos",
+  "email": "carlos@email.com",
+  "idade": 40,
+  "endereco": {
+    "rua": "Rua A",
+    "cidade": "Paracatu"
+  },
+  "telefones": [
+    "99999-1111",
+    "88888-2222"
+  ]
+}
